@@ -10,11 +10,11 @@ This repository contains the session slides, demo scripts, and extra code sample
 - **`slides/TEC2025-PowerShell101.pptx`**  
   The main presentation deck (PDF version also available for quick viewing).
 
-- **Learning Modules**  
+- **`session-scripts/*.ps1` Learning Modules**  
   Three scripts, each aligned to a section of the talk:
-  - `PS101.ps1` → Core basics (vars, quotes, strings vs ints, arrays, hashtables, piping, where filtering).
-  - `PS102.ps1` → Loops and Logic (if/then, foreach, do/while)
-  - `PS103.ps1` → Functions and Modules
+  - `101.ps1` → Core basics (vars, quotes, strings vs ints, arrays, PSCustomObjects, piping, where filtering).
+  - `102.ps1` → Loops and Logic (if/then, foreach, do/while)
+  - `103.ps1` → Functions and Libraries
 
 - **`code-examples/`**  
   A collection of small, practical scripts that do useful or fun things, such as:
