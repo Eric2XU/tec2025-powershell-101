@@ -7,8 +7,8 @@ This repository contains the session slides, demo scripts, and extra code sample
 
 ## 📂 Repository Contents
 
-- **`slides/TEC2025-PowerShell101.pptx`**  
-  The main presentation deck (PDF version also available for quick viewing).
+- **`slides/TEC2025-PowerShell101.PDF`**  
+  The main presentation deck
 
 - **`session-scripts/*.ps1` Learning Modules**  
   Three scripts, each aligned to a section of the talk:
@@ -17,7 +17,11 @@ This repository contains the session slides, demo scripts, and extra code sample
   - `103.ps1` → Functions and Libraries
 
 - **`code-examples/`**  
-  A collection of small, practical scripts that do useful or fun things, such as:
+  A collection of small, practical scripts and notes that do useful or fun things, such as:
+  - Teach about Profiles
+  - ListView from PSReadline
+  - Talk about Terminals
+  - How to Setup Oh-My-Posh
   - Certificate Automation Renewal via Azure DNS for DCV
   - AD Password Hygine
   - Visual Studio Font Changes
