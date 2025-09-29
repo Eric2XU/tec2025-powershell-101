@@ -1,6 +1,28 @@
 # PowerShell 101 - Basics
 # Eric Weintraub - TEC 2025
 
+
+#region Real World DataSets for examples
+
+# Real World DataSets for examples
+Connect-MgGraph -Scopes "User.Read.All","Application.Read.All","Policy.Read.All","AuditLog.Read.All","DeviceManagementConfiguration.Read.All","DeviceManagementManagedDevices.Read.All"
+
+# Pull Basic User Data along with SignInActivity for a single user
+$allUsers = Get-MgUser -all -Property id, SignInActivity, UserType, AccountEnabled, Department, DisplayName, Id, OnPremisesSyncEnabled, Country,OfficeLocation | Select-Object id, DisplayName, UserType, AccountEnabled, Department, @{Name="LastSignInDate";Expression={ $_.SignInActivity.LastSignInDateTime }}, OnPremisesSyncEnabled, Country, OfficeLocation
+
+$AllDevices = Get-MgDevice -All | select AccountEnabled, ApproximateLastSignInDateTime, DeviceId, DeviceOwnership, DisplayName, EnrollmentType, Id, IsCompliant, IsManaged, IsRooted, ManagementType, Manufacturer, Model, OperatingSystem, ProfileType
+
+# Export all of the above data sets to JSON files just in case internet isnt working during the session
+$AllUsers | ConvertTo-Json -Depth 3 | Out-File "~\temp\AllUsers.json" -Force
+$AllDevices | ConvertTo-Json -Depth 3 | Out-File "~\temp\AllIntuneDevices.json" -Force
+
+# Import the data sets from JSON files if needed
+$AllUsers = Get-Content "~\temp\AllUsers.json" | ConvertFrom-Json
+$AllDevices = Get-Content "~\temp\AllDevices.json" | ConvertFrom-Json
+
+#endregion
+
+
 # -------------------------------
 # VARIABLES
 # -------------------------------
@@ -81,29 +103,53 @@ $users = @(
 
 
 # -------------------------------
-# Querying / Filtering Objects
+# Querying / Selecting Objects
 # -------------------------------
 
 # List all users
-$users
+$allUsers
 
-# List first 2 users
-$users | Select-Object -First 2
+
+# List first 5 users
+$AllUsers | select -first 5
+$AllUsers | select -first 5 | ft -AutoSize
+
 
 # List Last 2 users
-$users | Select-Object -Last 2
+$AllUsers | Select-Object -Last 2
 
 # List all user names
-$users.Name
+$AllUsers.DisplayName
 
-# List all active users
-$AllActiveUsers = $users | Where-Object { $_.Active -eq $true }
+# Count All Users
+$AllUsers.Count
+$AllUsers | Measure-Object
+$AllUsers | Measure-Object | Select-Object Count
 
-# List all users with a specific role
-$AllEngineers = $users | Where-Object { $_.Role -like "Eng*" } | Sort-Object Name
+# Group all users by type
+$AllUsers | Group-Object UserType
 
-# Disable Eric and re-enable Eric
-$Eric = $users | Where-Object { $_.Name -eq "Eric" }
-$Eric.Active = $false
-$Eric
-$Eric.Active = $true
+# -------------------------------
+# WHERE / FILTERING
+# -------------------------------
+
+# List a single device so we can take a look at the data 
+$AllDevices | select -first 1
+
+# all active devices
+$AllDevices | Where-Object { $_.AccountEnabled -eq $true } 
+
+# count of all active devices
+$AllDevices | Where-Object { $_.AccountEnabled -eq $true } | Measure-Object | Select-Object Count
+
+# Devices Grouped by Model
+$AllDevices | Group-Object Model | Sort-Object Count
+$AllDevices | Group-Object Model | select -first 5 | Sort-Object Count
+$AllDevices | Group-Object Model | Sort-Object Count -Descending | select -first 5 
+$AllDevices | Group-Object Model | ? {$_.Model -ne ""} | Sort-Object Count -Descending | select -first 5
+$AllDevices | Group-Object Model | ? {$_.Name -ne ""} | Sort-Object Count -Descending | select -first 5
+$AllDevices | Group-Object Model | ? {$_.Name -ne ""} | Sort-Object Count -Descending | select -first 5 | ft Name, Count -AutoSize
+
+# List all Latitude devices
+$AllDevices | Where-Object { $_.Model -like "Latitude*" } | select DisplayName, DeviceOwnership, Model, OperatingSystem, ApproximateLastSignInDateTime | Sort-Object ApproximateLastSignInDateTime | select -First 5| ft -AutoSize 
+$AllDevices | Where-Object { $_.Model -like "Latitude*" } | ? {$_.ApproximateLastSignInDateTime -ne $null}| select DisplayName, DeviceOwnership, Model, OperatingSystem, ApproximateLastSignInDateTime, AccountEnabled | Sort-Object ApproximateLastSignInDateTime | select -First 5| ft -AutoSize 
