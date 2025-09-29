@@ -17,14 +17,11 @@ This repository contains the session slides, demo scripts, and extra code sample
   - `103.ps1` → Functions and Libraries
 
 - **`code-examples/`**  
-  A collection of small, practical scripts and notes that do useful or fun things, such as:
+  A collection of practical scripts and tips that do useful or fun things, such as:
   - Teach about Profiles
   - ListView from PSReadline
   - Talk about Terminals
   - How to Setup Oh-My-Posh
-  - Certificate Automation Renewal via Azure DNS for DCV
-  - AD Password Hygine
-  - Visual Studio Font Changes
   - Microsoft Secrets Management
 
 ---
