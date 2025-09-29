@@ -22,7 +22,6 @@ $AllDevices = Get-Content "~\temp\AllDevices.json" | ConvertFrom-Json
 
 #endregion
 
-
 # -------------------------------
 # VARIABLES
 # -------------------------------
@@ -31,7 +30,7 @@ $greeting = "Hello TEC"
 $number = 2025
 
 # Output the variables
-Write-Host $greeting
+echo $greeting
 Write-Host $number
 
 # You can concatenate variables (Notice that powershell tries really hard to make sense of less then perfectly defined intent)
@@ -49,13 +48,10 @@ $greeting + " " + $number
 "2" + "2"
 '2' + '2'
 "2" + 2
+2 + "2"
 "2" + "two"
 "two" + 2
 2 + "two"
-
-# Why casting matters
-[int]"2" + [int]"2"
-[int]"2" + "2"
 
 # See if its a string or an integer
 $number | gm
@@ -65,10 +61,9 @@ $greeting | gm
 Write-Host 'Our Greeting is: $greeting $number'    # Single quotes do not expand variables
 Write-Host "Our Greeting is: $greeting $number"    # Double quotes do expand variables
 
-# Proper use of a var in a string
+# Proper use of a var in a string $()
 Write-Host "Our Greeting is: $($greeting) $($number)"  
 Write-Host "Our Greeting is: $($greeting + $number+1000)"  
-Write-Host "Our Greeting is: $($greeting + [int]$number+1000)"
 Write-Host "Our Greeting is: $($greeting + ($number+1000))" # Correctly adds 1000 to number before concatenation
 
 # -------------------------------
@@ -125,6 +120,7 @@ $AllUsers.DisplayName
 $AllUsers.Count
 $AllUsers | Measure-Object
 $AllUsers | Measure-Object | Select-Object Count
+$AllUsers | Measure-Object | Select-Object -ExpandProperty Count
 
 # Group all users by type
 $AllUsers | Group-Object UserType
@@ -150,6 +146,5 @@ $AllDevices | Group-Object Model | ? {$_.Model -ne ""} | Sort-Object Count -Desc
 $AllDevices | Group-Object Model | ? {$_.Name -ne ""} | Sort-Object Count -Descending | select -first 5
 $AllDevices | Group-Object Model | ? {$_.Name -ne ""} | Sort-Object Count -Descending | select -first 5 | ft Name, Count -AutoSize
 
-# List all Latitude devices
-$AllDevices | Where-Object { $_.Model -like "Latitude*" } | select DisplayName, DeviceOwnership, Model, OperatingSystem, ApproximateLastSignInDateTime | Sort-Object ApproximateLastSignInDateTime | select -First 5| ft -AutoSize 
-$AllDevices | Where-Object { $_.Model -like "Latitude*" } | ? {$_.ApproximateLastSignInDateTime -ne $null}| select DisplayName, DeviceOwnership, Model, OperatingSystem, ApproximateLastSignInDateTime, AccountEnabled | Sort-Object ApproximateLastSignInDateTime | select -First 5| ft -AutoSize 
+# Find Stale Devices 
+$AllDevices | ? {$_.AccountEnabled -eq $true -and $_.ApproximateLastSignInDateTime -lt ((Get-Date).AddYears(-1)) -and $_.ApproximateLastSignInDateTime -ne $null} | sort-object ApproximateLastSignInDateTime | select DisplayName, ApproximateLastSignInDateTime -first 5 | ft -AutoSize

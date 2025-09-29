@@ -5,15 +5,14 @@
 # FUNCTIONS
 # -------------------------------
 # Functions are reusable blocks of code that can take parameters and return values
-function Get-Greeting {
-    param (
-        [string]$Name = "Guest"
-    )
-    return "Hello, $Name!"
+# FUNCTION ($OptionalIncomingVar) {Code} 
+function Get-Greeting ($name) {
+    "Hello, $name!"
 }
 # Call the function
 Get-Greeting -Name "TEC"
-Get-Greeting
+Get-Greeting "BOB"
+
 
 # -------------------------------
 # LIBRARIES
@@ -21,6 +20,8 @@ Get-Greeting
 # Libraries are collections of functions that can be imported and used in your scripts
 # Example library file: lib.vscode.ps1
 # Use dot-sourcing to import the library
-. "$PSScriptRoot/../lib.vscode.ps1"
+. "$HOME/GitRepos/GitHub/tec2025-powershell-101/code-examples/lib.vscode.ps1"
+
 # Now you can use the functions from the library
+
 

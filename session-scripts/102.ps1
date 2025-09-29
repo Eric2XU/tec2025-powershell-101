@@ -1,14 +1,15 @@
 # PowerShell 102 - Loops and Logic
 # Eric Weintraub - TEC 2025
 
-
 # -------------------------------
 # FOREACH LOOPS
 # -------------------------------
 # foreach ($loopVar in $RealVar) {<code>}
 
-$CounterForFun = 0 
-foreach ($User in ($AllUsers | select -first 5)) {
+$CounterForFun = 1
+$LessUsers = $AllUsers | select -first 5
+
+foreach ($User in $LessUsers) {
     # You can put ANYTHING in this loop an it will deal with the $User object
     Write-Host "Counter: $($CounterForFun)" 
     Write-Host "User: $($User.id) - Last Sign-In: $($User.LastSignInDate)"
@@ -77,22 +78,22 @@ do {
 
 $StartTime = Get-Date
 $EndTime = $StartTime.AddSeconds(20)
-$JokeCount = 1
+$JokeCounter = 1
 
 do {
     # Call the icanhazdadjoke API for a random dad joke
     $JokeResponse = Invoke-RestMethod -Uri "https://icanhazdadjoke.com/" -Headers @{"Accept" = "application/json"}
 
     # Display the joke with some formatting
-    Write-Host "🎭 Dad Joke #$($JokeCount):" -ForegroundColor Cyan
+    Write-Host "🎭 Dad Joke #$($JokeCounter):" -ForegroundColor Cyan
     Write-Host "   $($JokeResponse.joke)" -ForegroundColor White
     Write-Host ""
 
     
     Write-Host "⏱️  Next joke in 5 seconds..." -ForegroundColor DarkGray
     Start-Sleep -Seconds 5
-    $JokeCount++
+    $JokeCounter++
 } while ((Get-Date) -lt $EndTime)
 
-Write-Host "🎉 Dad joke marathon complete! Displayed $($JokeCount - 1) jokes in 60 seconds!" -ForegroundColor Green
+Write-Host "🎉 Dad joke marathon complete! Displayed $($JokeCounter - 1) jokes in 60 seconds!" -ForegroundColor Green
 Write-Host "Hope you had some laughs! 😄" -ForegroundColor Yellow
