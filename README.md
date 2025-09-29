@@ -22,6 +22,7 @@ This repository contains the session slides, demo scripts, and extra code sample
   - ListView from PSReadline
   - Talk about Terminals
   - How to Setup Oh-My-Posh
+  - SSH Remoting Guide
   - Microsoft Secrets Management
 
 ---
